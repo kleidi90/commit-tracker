@@ -1,0 +1,18 @@
+parameters:
+    app.github_token: '%env(GITHUB_TOKEN)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Entity/'
+            - '../src/Enum/'
+            - '../src/Message/'
+            - '../src/Provider/CommitDto.php'
+            - '../src/Provider/RepoRef.php'
+            - '../src/**/*Exception.php'
+            - '../src/Kernel.php'

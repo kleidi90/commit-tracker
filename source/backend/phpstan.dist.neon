@@ -1,0 +1,13 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    symfony:
+        # Lets PHPStan type $container->get(...) in tests. The file exists once the test
+        # kernel has booted; on a fresh clone run `bin/console cache:warmup --env=test` first.
+        containerXmlPath: var/cache/test/App_KernelTestDebugContainer.xml

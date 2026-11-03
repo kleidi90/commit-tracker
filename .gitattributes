@@ -1,0 +1,8 @@
+# Everything runs inside Linux containers, so keep Linux line endings in the
+# working tree, even when Git for Windows is set to convert them (core.autocrlf).
+# A shell script with Windows line endings fails inside the container.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary

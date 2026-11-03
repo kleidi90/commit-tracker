@@ -1,0 +1,21 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    http_method_override: false
+    handle_all_throwables: true
+    php_errors:
+        log: true
+
+    http_client:
+        scoped_clients:
+            # Inject with: HttpClientInterface $githubClient
+            github.client:
+                base_uri: 'https://api.github.com'
+                headers:
+                    Accept: 'application/vnd.github+json'
+                    X-GitHub-Api-Version: '2022-11-28'
+                    User-Agent: 'commit-tracker'
+                timeout: 20
+
+when@test:
+    framework:
+        test: true

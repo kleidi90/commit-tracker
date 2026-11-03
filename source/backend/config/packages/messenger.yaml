@@ -1,0 +1,26 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            # Imports run in the worker container, so the API answers immediately
+            # and the interface polls the sync run for progress.
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    queue_name: import
+                retry_strategy:
+                    max_retries: 3
+                    delay: 2000
+                    multiplier: 2
+            failed: 'doctrine://default?queue_name=failed'
+
+        routing:
+            App\Message\ImportRepositoryMessage: async
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'in-memory://'
+                failed: 'in-memory://'

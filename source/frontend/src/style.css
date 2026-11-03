@@ -1,0 +1,131 @@
+/* Visual design is not assessed. These rules only keep the screens readable. */
+
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: #1f2328;
+  background: #ffffff;
+}
+
+body {
+  margin: 0;
+}
+
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.app-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.app-title {
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-main {
+  padding: 1rem 0 2rem;
+}
+
+.add-form {
+  margin-bottom: 1.5rem;
+}
+
+.add-form-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.add-form-row input {
+  flex: 1;
+}
+
+input,
+button {
+  font: inherit;
+  padding: 0.35rem 0.6rem;
+}
+
+.state {
+  padding: 1rem;
+  border: 1px dashed #d0d7de;
+  border-radius: 6px;
+}
+
+.state-title {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.state-error {
+  border-color: #cf222e;
+}
+
+.text-error {
+  color: #cf222e;
+}
+
+.text-muted {
+  color: #59636e;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid #d0d7de;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table .num {
+  text-align: right;
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

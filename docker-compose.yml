@@ -1,0 +1,70 @@
+name: commit-tracker
+
+x-php: &php
+  build:
+    context: ./source
+    dockerfile: docker/php/Dockerfile
+  environment:
+    DATABASE_URL: "postgresql://app:${POSTGRES_PASSWORD:-app}@db:5432/app?serverVersion=16&charset=utf8"
+    GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+  volumes:
+    - ./source/backend:/app
+    # Symfony's cache and logs live in a Docker volume, not in your project folder.
+    # Writing thousands of cache files through a Windows or macOS mount is very slow.
+    - backend_var:/app/var
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-app}"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      # Exposed on localhost only, so you can inspect the data with a database client.
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Installs dependencies and runs migrations on start, then serves the API.
+  php:
+    <<: *php
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/var/.ready"]
+      start_period: 10m
+      start_interval: 3s
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # Runs imports in the background.
+  worker:
+    <<: *php
+    command: ["php", "bin/console", "messenger:consume", "async", "-vv", "--time-limit=3600"]
+    restart: unless-stopped
+    depends_on:
+      php:
+        condition: service_healthy
+
+  # Serves the built frontend and passes /api to PHP.
+  web:
+    build:
+      context: ./source
+      dockerfile: docker/frontend/Dockerfile
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      php:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  backend_var:

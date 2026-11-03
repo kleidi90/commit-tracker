@@ -1,0 +1,20 @@
+/.env
+
+/source/backend/vendor/
+/source/backend/var/
+/source/backend/.env.local
+/source/backend/.env.*.local
+/source/backend/.phpunit.cache/
+
+/source/frontend/node_modules/
+/source/frontend/dist/
+
+.DS_Store
+.idea/
+/.claude/settings.local.json
+.gstack/
+/source/backend/.php-cs-fixer.cache
+/source/backend/config/reference.php
+
+# Personal notes kept out of the repository.
+/private-docs/
