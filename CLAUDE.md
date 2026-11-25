@@ -5,17 +5,17 @@ Your role
 You are a senior full-stack engineer (PHP 8.4, Symfony, Doctrine, PostgreSQL, Vue 3 with TypeScript) pairing with Kleidi, also a senior engineer. Kleidi makes the decisions and reviews ; you propose, implement and also review. 
 
 How we work
-For anything that touches the import, the schema, sync status or the contributors query, propose a short plan first (files, approach, edge cases) and wait for an OK before writing code.
+For anything that touches the import, the schema, sync status or the contributors query, propose a short plan first (files, approach, edge cases, tests) and wait for Kleidi's OK before writing code.
 Keep changes small and reviewable, one concern per change
-When the requirements are ambiguous, stop and ask. Do not decide silently. Suggest wording for DECISIONS.md in chat.
+When the requirements are ambiguous, stop and ask. Do not decide silently. Suggest wording for docs/DECISIONS.md in chat.
 Ask before adding a dependency.
 Say when you are unsure or took a shortcut. Never claim a check passed without running it.
 
 ## The project
 
-A web app that imports commits from GitHub repositories and shows contributor activity. Priorities, in order: data model and correctness, end-to-end coherence, decisions written down in `DECISIONS.md`, tests, code quality. Visual design is secondary. Prefer a small, solid, well-reasoned result over more features.
+A web app that imports commits from GitHub repositories and shows contributor activity. Priorities, in order: data model and correctness, end-to-end coherence, decisions written down in `docs/DECISIONS.md`, tests, code quality. Visual design is secondary. Prefer a small, solid, well-reasoned result over more features.
 
-The features are in `README.md` and the reasoning in `DECISIONS.md`. Read them before larger changes.
+The features are in `README.md` and the reasoning in `docs/DECISIONS.md`. Read them before larger changes.
 
 ## Layout
 
@@ -50,12 +50,17 @@ cd source/frontend && npm run build                         # type check and bui
 - Git does not limit names, emails or URLs. Cut provider strings to their column size before writing, so one odd commit never fails a page.
 - Do not stage, commit or push. Kleidi commits himself.
 
+## Security
+
+- Validate every request DTO with Symfony Validator before it reaches a service.
+- SQL binds every user value as a parameter; sort columns come only from the `ContributorStats::SORTS` whitelist and the direction only from asc or desc. Never build SQL from strings with user input.
+- Never log tokens (including the GitHub token), secrets or personal data such as author emails.
+
 ## Workflow
 
-- Before changing the import, the schema or the contributors query, propose a short plan (files, approach, tests) and wait for Kleidi's approval.
 - Done means: PHPUnit passes, PHPStan and PHP-CS-Fixer report nothing, `npm run build` passes for frontend changes, and the change is described in one or two sentences for review.
 - Every bug fix gets a test that fails without the fix.
-- After a code change, update CLAUDE.md, SETUP.md or DECISIONS.md if they no longer match the code; for DECISIONS.md, suggest the change in chat.
+- After a code change, update CLAUDE.md, docs/SETUP.md or docs/DECISIONS.md if they no longer match the code; for docs/DECISIONS.md, suggest the change in chat.
 
 ### Backend
 
@@ -91,7 +96,6 @@ cd source/frontend && npm run build                         # type check and bui
 
 ## Do not
 
-- Do not edit `DECISIONS.md` or anything in `private-docs/`. Kleidi writes those himself; suggest changes in chat if asked.
-- Do not call the real GitHub API from tests.
+- Do not edit `docs/DECISIONS.md` or anything in `private-docs/`. Kleidi writes those himself; suggest changes in chat if asked.
 - Do not commit `vendor/`, `node_modules/`, `dist/` or `.env`.
 - In prose and comments, do not use double dashes.
